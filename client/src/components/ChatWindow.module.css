@@ -842,3 +842,36 @@
   color: var(--primary);
   background: var(--primary-light);
 }
+
+@media (max-width: 768px) {
+  .window {
+    padding: 16px;
+    height: 50vh;
+    overflow-y: auto;
+  }
+
+  .pubGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .trialGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .userCard {
+    max-width: 100%;
+  }
+
+  .exampleGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .statsBar {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .inputBar {
+    padding: 12px 0;
+  }
+}

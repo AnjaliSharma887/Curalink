@@ -184,3 +184,14 @@
   text-align: center;
   line-height: 1.5;
 }
+
+@media (max-width: 768px) {
+  .panel {
+    width: 100%;
+    min-width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    max-height: 50vh;
+    overflow-y: auto;
+  }
+}
