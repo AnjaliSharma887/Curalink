@@ -175,6 +175,7 @@
   font-family: 'DM Sans', sans-serif;
   font-size: 17px;
   font-weight: 700;
+  text-transform: capitalize;
   color: var(--text-primary);
   margin: 24px 0 10px 0;
   padding-bottom: 8px;
