@@ -9,6 +9,7 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId, setSessionId] = useState(null);
   const [prefillQuestion, setPrefillQuestion] = useState('');
+  const [showResults, setShowResults] = useState(false); // ← ADD THIS
   
   const handleExampleClick = (question) => {
   setPrefillQuestion(question);
@@ -25,6 +26,7 @@ export default function App() {
 }]);
 
     setIsLoading(true);
+    setShowResults(true); // ← ADD THIS
 
     try {
       const response = await sendResearchQuery({
@@ -74,7 +76,8 @@ export default function App() {
   };
 
   return (
-    <div className={styles.app}>
+  <div className={styles.app}>
+    <div className={`${styles.inputWrapper} ${showResults ? styles.inputHidden : ''}`}>
       <InputPanel
         onSubmit={handleSubmit}
         isLoading={isLoading}
@@ -82,12 +85,23 @@ export default function App() {
         prefillQuestion={prefillQuestion}
         onPrefillUsed={() => setPrefillQuestion('')}
       />
+    </div>
+
+    <div className={`${styles.resultsWrapper} ${!showResults ? styles.resultsHidden : ''}`}>
+      {showResults && (
+        <button
+          className={styles.backButton}
+          onClick={() => setShowResults(false)}
+        >
+          ← Back to Search
+        </button>
+      )}
       <ChatWindow
         messages={messages}
         isLoading={isLoading}
-        onFollowUp={handleFollowUp}  // ← ADD THIS PROP
+        onFollowUp={handleFollowUp}
         onExampleClick={handleExampleClick}
       />
     </div>
-  );
-}
+  </div>
+)};
