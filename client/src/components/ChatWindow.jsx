@@ -597,11 +597,24 @@ function TrialsSection({ trials, title, icon, onCardClick }) {
 
           {trial.eligibility && (
             <div className={styles.trialEligibility}>
-             📋 <strong>Eligibility:</strong> {trial.eligibility
-                ?.replace(/\\</g, '<')
-                ?.replace(/\\>/g, '>')
-                ?.replace(/\\*/g, '')
-                ?.substring(0, 250)}...
+              <div className={styles.eligibilityCardHeader}>
+                <span>📋 <strong>Eligibility</strong></span>
+                  <span className={styles.eligibilityClickHint}>click to see full eligibility</span>
+              </div>
+              {trial.eligibility
+                .replace(/\\n/g, '\n')
+                .replace(/\\*/g, '')
+                .split('\n')
+                .map(l => l.trim())
+                .filter(l => l.length > 0 && !l.toLowerCase().includes('inclusion criteria') && !l.toLowerCase().includes('exclusion criteria'))
+                .slice(0, 3)
+                .map((point, i) => (
+                  <div key={i} className={styles.eligibilityPoint}>
+                    <span className={styles.eligibilityDot}>•</span>
+                    <span>{point.replace(/^[*-]\s*/, '')}</span>
+                  </div>
+                ))
+              }
             </div>
           )}
 
