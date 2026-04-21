@@ -187,11 +187,10 @@
 
 @media (max-width: 768px) {
   .panel {
-    width: 100%;
-    min-width: 100%;
+    width: 100vw !important;
+    min-width: 100vw !important;
+    height: 100vh !important;
     border-right: none;
-    border-bottom: 1px solid var(--border);
-    max-height: 50vh;
-    overflow-y: auto;
+    border-bottom: none;
   }
 }
