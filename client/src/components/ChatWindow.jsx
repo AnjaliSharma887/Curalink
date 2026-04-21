@@ -151,14 +151,6 @@ function TrialModal({ trial, onClose }) {
 
   const lines = formatEligibility(trial.eligibility);
 
-  const inclusionLines = lines.filter(l =>
-    !l.toLowerCase().includes('exclusion criteria')
-  );
-  const exclusionLines = lines.filter(l =>
-    l.toLowerCase().includes('exclusion') ||
-    lines.indexOf(l) > lines.findIndex(l => l.toLowerCase().includes('exclusion criteria'))
-  );
-
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modal} onClick={e => e.stopPropagation()}>
@@ -197,7 +189,7 @@ function TrialModal({ trial, onClose }) {
                 const isHeader = line.toLowerCase().includes('inclusion criteria') ||
                                  line.toLowerCase().includes('exclusion criteria');
                 const isBullet = line.startsWith('*') || line.startsWith('-') ||
-                                 line.match(/^\d+\./);
+                 line.match(/^[*-]/);
                 const cleanLine = line.replace(/^[\*\-]\s*/, '').trim();
 
                 if (isHeader) {
