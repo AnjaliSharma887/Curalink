@@ -483,7 +483,11 @@ function TrialsSection({ trials, title, icon }) {
 
           {trial.eligibility && (
             <div className={styles.trialEligibility}>
-              📋 <strong>Eligibility:</strong> {trial.eligibility?.substring(0, 200)}...
+             📋 <strong>Eligibility:</strong> {trial.eligibility
+                ?.replace(/\\</g, '<')
+                ?.replace(/\\>/g, '>')
+                ?.replace(/\\*/g, '')
+                ?.substring(0, 250)}...
             </div>
           )}
 
