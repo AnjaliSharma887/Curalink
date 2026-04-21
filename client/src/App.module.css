@@ -23,31 +23,31 @@
 /* Mobile */
 @media (max-width: 768px) {
   .app {
-    flex-direction: column;
     height: 100vh;
+    width: 100vw;
     position: relative;
+    overflow: hidden;
   }
 
   .inputWrapper {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
+    width: 100vw !important;
+    height: 100vh !important;
+    flex-shrink: unset !important;
     overflow-y: auto;
-    z-index: 2;
-    background: white;
+    z-index: 10;
   }
 
   .resultsWrapper {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
+    width: 100vw !important;
+    height: 100vh !important;
     overflow-y: auto;
-    z-index: 2;
-    background: var(--bg);
+    z-index: 10;
     flex-direction: column;
   }
 

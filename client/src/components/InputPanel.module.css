@@ -188,9 +188,9 @@
 @media (max-width: 768px) {
   .panel {
     width: 100vw !important;
-    min-width: 100vw !important;
-    height: 100vh !important;
+    min-width: unset !important;
+    height: auto;
+    min-height: 100vh;
     border-right: none;
-    border-bottom: none;
   }
 }
