@@ -136,11 +136,119 @@ function PublicationModal({ source, citedText, onClose }) {
   );
 }
 
+function TrialModal({ trial, onClose }) {
+  if (!trial) return null;
+
+  const formatEligibility = (text) => {
+    if (!text) return [];
+    return text
+      .replace(/\\n/g, '\n')
+      .replace(/\\\*/g, '')
+      .split('\n')
+      .map(line => line.trim())
+      .filter(line => line.length > 0);
+  };
+
+  const lines = formatEligibility(trial.eligibility);
+
+  const inclusionLines = lines.filter(l =>
+    !l.toLowerCase().includes('exclusion criteria')
+  );
+  const exclusionLines = lines.filter(l =>
+    l.toLowerCase().includes('exclusion') ||
+    lines.indexOf(l) > lines.findIndex(l => l.toLowerCase().includes('exclusion criteria'))
+  );
+
+  return (
+    <div className={styles.modalOverlay} onClick={onClose}>
+      <div className={styles.modal} onClick={e => e.stopPropagation()}>
+        <button className={styles.modalClose} onClick={onClose}>✕</button>
+
+        <div className={styles.modalTitle}>{trial.title}</div>
+
+        <div className={styles.modalMeta}>
+          <span className={`${styles.statusBadge} ${
+            trial.status === 'RECRUITING' ? styles.recruiting :
+            trial.status === 'COMPLETED' ? styles.completed : styles.active
+          }`}>
+            <span className={styles.statusDot} />
+            {trial.status}
+          </span>
+          {trial.locations && (
+            <>
+              <span className={styles.modalDot}>·</span>
+              <span className={styles.modalYear}>📍 {trial.locations}</span>
+            </>
+          )}
+        </div>
+
+        {trial.description && (
+          <>
+            <div className={styles.modalAbstractLabel}>Description</div>
+            <div className={styles.modalAbstract}>{trial.description}</div>
+          </>
+        )}
+
+        {lines.length > 0 && (
+          <>
+            <div className={styles.modalAbstractLabel}>📋 Eligibility Criteria</div>
+            <div className={styles.eligibilitySection}>
+              {lines.map((line, i) => {
+                const isHeader = line.toLowerCase().includes('inclusion criteria') ||
+                                 line.toLowerCase().includes('exclusion criteria');
+                const isBullet = line.startsWith('*') || line.startsWith('-') ||
+                                 line.match(/^\d+\./);
+                const cleanLine = line.replace(/^[\*\-]\s*/, '').trim();
+
+                if (isHeader) {
+                  return (
+                    <div key={i} className={styles.eligibilityHeader}>
+                      {cleanLine}
+                    </div>
+                  );
+                }
+                if (isBullet || cleanLine.length > 0) {
+                  return (
+                    <div key={i} className={styles.eligibilityPoint}>
+                      <span className={styles.eligibilityDot}>•</span>
+                      <span>{cleanLine}</span>
+                    </div>
+                  );
+                }
+                return null;
+              })}
+            </div>
+          </>
+        )}
+
+        {trial.contact && trial.contact !== 'Not provided' && (
+          <>
+            <div className={styles.modalAbstractLabel}>📞 Contact</div>
+            <div className={styles.modalAbstract}>{trial.contact}</div>
+          </>
+        )}
+
+        {trial.url && (
+          
+          <a  href={trial.url}
+            target="_blank"
+            rel="noreferrer"
+            className={styles.modalUrl}
+          >
+            🔗 View Full Trial →
+          </a>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function ChatWindow({ messages, isLoading, onFollowUp, onExampleClick }) {
   const [inputValue, setInputValue] = useState('');
   const bottomRef = useRef(null);
   const [selectedSource, setSelectedSource] = useState(null);
   const [citedText, setCitedText] = useState('');
+  const [selectedTrial, setSelectedTrial] = useState(null);
 
   useEffect(() => {
   bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -167,6 +275,10 @@ export default function ChatWindow({ messages, isLoading, onFollowUp, onExampleC
   const handlePubCardClick = (pub) => {
     setSelectedSource(pub);
     setCitedText('');
+  };
+
+  const handleTrialCardClick = (trial) => {
+    setSelectedTrial(trial);
   };
 
   // Empty state
@@ -274,6 +386,7 @@ export default function ChatWindow({ messages, isLoading, onFollowUp, onExampleC
                   trials={msg.clinicalTrials}
                   title={`Clinical Trials for ${msg.disease || 'this condition'}`}
                   icon="🧪"
+                  onCardClick={handleTrialCardClick}
                 />
               )}
 
@@ -281,6 +394,7 @@ export default function ChatWindow({ messages, isLoading, onFollowUp, onExampleC
                 <TrialsSection
                   trials={msg.queryClinicalTrials}
                   title="Trials related to your question"
+                  onCardClick={handleTrialCardClick}
                   icon="💊"
                 />
               )}
@@ -354,6 +468,14 @@ export default function ChatWindow({ messages, isLoading, onFollowUp, onExampleC
           onClose={() => setSelectedSource(null)}
         />
       )}
+
+      {selectedTrial && (
+        <TrialModal
+        trial={selectedTrial}
+        onClose={() => setSelectedTrial(null)}
+        />
+      )}
+
     </div>
   );
 }
@@ -452,7 +574,7 @@ function PublicationsSection({ publications, onCardClick }) {
   );
 }
 
-function TrialsSection({ trials, title, icon }) {
+function TrialsSection({ trials, title, icon, onCardClick }) {
   const getStatusClass = (status) => {
     if (status === 'RECRUITING') return styles.recruiting;
     if (status === 'COMPLETED') return styles.completed;
@@ -468,7 +590,7 @@ function TrialsSection({ trials, title, icon }) {
       </div>
       <div className={styles.trialGrid}>
         {trials.slice(0, 3).map((trial, i) => (
-          <div key={i} className={styles.trialCard}>
+          <div key={i} className={`${styles.trialCard} ${styles.pubCardClickable}`} onClick={() => onCardClick && onCardClick(trial)}>
             <span className={`${styles.statusBadge} ${getStatusClass(trial.status)}`}>
               <span className={styles.statusDot} />
               {trial.status}

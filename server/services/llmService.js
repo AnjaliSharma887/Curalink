@@ -36,7 +36,7 @@ ${trialsContext}
 
 Write a comprehensive response in this exact structure:
 
-## Direct Answer: ${query.charAt(0).toUpperCase() + query.slice(1)}
+${query.charAt(0).toUpperCase() + query.slice(1)}
 [Start by DIRECTLY answering "${query}" in 2-3 sentences with specific facts. Then provide supporting context about ${disease}. Do NOT give a generic disease overview — answer what was specifically asked FIRST. Bold key medical terms. Cite sources like [1][2].]
 
 FOCUS REQUIREMENT: The user is specifically asking about "${query}". 

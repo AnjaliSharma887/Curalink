@@ -42,9 +42,8 @@ async function fetchClinicalTrials(disease, query, maxResults = 50, location = '
         status: status.overallStatus || 'Unknown',
         description: description.briefSummary?.substring(0, 400) || 'No description',
         eligibility: eligibility.eligibilityCriteria
-          ?.replace(/\\n/g, ' ')
-          ?.replace(/\n/g, ' ')
-          ?.substring(0, 400) || 'See full listing',
+          ?.replace(/\n/g, '\n')
+          ?.substring(0, 2000) || 'See full listing',
         locations: locations.join(' | ') || 'Not specified',
         contact: contactInfo,
         nctId: identification.nctId || null,
