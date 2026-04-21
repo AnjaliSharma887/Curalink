@@ -190,7 +190,7 @@ function TrialModal({ trial, onClose }) {
                                  line.toLowerCase().includes('exclusion criteria');
                 const isBullet = line.startsWith('*') || line.startsWith('-') ||
                  line.match(/^[*-]/);
-                const cleanLine = line.replace(/^[\*\-]\s*/, '').trim();
+                const cleanLine = line.replace(/^[*-]\s*/, '').trim();
 
                 if (isHeader) {
                   return (
