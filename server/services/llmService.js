@@ -71,7 +71,7 @@ For each citation [1][2] etc, after citing include a brief supporting quote in q
           { role: 'user', content: userPrompt }
         ],
         temperature: 0.3,
-        max_tokens: 900
+        max_tokens: 800
       },
       {
         headers: {
