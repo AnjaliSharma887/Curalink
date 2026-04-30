@@ -8,18 +8,17 @@ async function generateMedicalResponse(disease, query, publications, clinicalTri
 [${i + 1}] Title: ${pub.title}
 Authors: ${pub.authors?.slice(0,2).join(', ') || 'Unknown'}
 Year: ${pub.year} | Source: ${pub.source}
-Key Finding: ${pub.abstract?.substring(0, 300) || 'No abstract'}
+Key Finding: ${pub.abstract?.substring(0, 200) || 'No abstract'}
 URL: ${pub.url}
 `).join('\n');
 
-    const trialsContext = clinicalTrials.slice(0, 3).map((trial, i) => `
+    const trialsContext = clinicalTrials.slice(0, 2).map((trial, i) => `
 [T${i + 1}] ${trial.title}
 Status: ${trial.status} | Location: ${trial.locations}
-Description: ${trial.description?.substring(0, 200) || 'No description'}
+Description: ${trial.description?.substring(0, 150) || 'No description'}
 `).join('\n');
-
     const historyContext = conversationHistory.length > 0
-      ? `Previous conversation:\n${conversationHistory.slice(-4).map(m => `${m.role}: ${m.content}`).join('\n')}\n`
+      ? `Previous conversation:\n${conversationHistory.slice(-2).map(m => `${m.role}: ${m.content.substring(0, 200)}`).join('\n')}\n`
       : '';
 
     const systemPrompt = `You are Curalink, an expert AI medical research assistant. You communicate like a knowledgeable senior physician explaining to a patient. You write in clear, flowing paragraphs — never dry bullet points. You bold important medical terms, include specific statistics, and cite sources inline like [1] or [2].
@@ -72,7 +71,7 @@ For each citation [1][2] etc, after citing include a brief supporting quote in q
           { role: 'user', content: userPrompt }
         ],
         temperature: 0.3,
-        max_tokens: 1500
+        max_tokens: 900
       },
       {
         headers: {
